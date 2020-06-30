@@ -1,5 +1,5 @@
-import { setToken, getToken } from 'src/token/token';
-import { logout } from 'src/api/message';
+import { setToken, getToken } from '../token/token';
+import { logout } from '../api/message';
 
 interface IAuthConfig {
     autoLogout: boolean;

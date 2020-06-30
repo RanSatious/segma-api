@@ -1,14 +1,21 @@
 const http = require('http');
 
 const server = http.createServer((req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+
     if (req.url === '/404') {
         res.statusCode = 404;
         res.end('not found');
         return;
     }
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+    if (req.url === '/api') {
+        res.end(JSON.stringify({ success: true, data: 'result' }));
+        return;
+    }
+
     res.end('hello world');
 });
 

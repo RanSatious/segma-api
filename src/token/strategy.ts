@@ -6,9 +6,9 @@ interface IStrategy {
 
 const strategyList: Record<string, IStrategy> = {
     localStorage: {
-        get: window.localStorage.getItem,
-        set: window.localStorage.setItem,
-        remove: window.localStorage.removeItem,
+        get: (name: string) => window.localStorage.getItem(name),
+        set: (name: string, value: string) => window.localStorage.setItem(name, value),
+        remove: (name: string) => window.localStorage.removeItem(name),
     },
 };
 
