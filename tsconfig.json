@@ -1,0 +1,29 @@
+{
+    "include": ["src/**/*"],
+    "compilerOptions": {
+        "baseUrl": ".",
+        // 受 baseUrl 影响
+        "paths": {},
+        "outDir": "./dist",
+
+        "allowJs": false,
+        // 生成 *.d.ts 类型定义文件
+        "declaration": true,
+
+        "strict": true,
+        "noUnusedLocals": true,
+        // 过于严格
+        // "noImplicitAny": true,
+        // "noImplicitThis": true
+        // "strictNullChecks": true
+
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        // 为 commonjs 的包添加 default export
+        "esModuleInterop": true,
+
+        "experimentalDecorators": true,
+        "resolveJsonModule": true
+    }
+}
