@@ -1,5 +1,5 @@
 {
-    "name": "segma-api",
+    "name": "@segma/api-tools",
     "version": "0.1.0",
     "description": "api tools used in mosts projects",
     "main": "./dist/src/index.js",
@@ -10,7 +10,8 @@
         "dev": "tsc --watch",
         "prepack": "npm run clean && npm run build",
         "test": "jest --env=jsdom",
-        "test:one": "jest tests/api.test.ts --env=jsdom"
+        "test:one": "jest tests/api.test.ts --env=jsdom",
+        "server": "node tests/server.js"
     },
     "keywords": [
         "segma",
