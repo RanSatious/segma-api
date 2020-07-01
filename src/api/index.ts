@@ -30,7 +30,14 @@ const defaultConfig: IApiConfig = {
 };
 
 function ApiFactory(config: IApiConfig) {
-    config = Object.assign({}, defaultConfig, config);
+    config = {
+        ...defaultConfig,
+        ...config,
+        axiosConfig: {
+            ...defaultConfig.axiosConfig,
+            ...config.axiosConfig,
+        },
+    };
     const { tip, axiosConfig, auth, redirect } = config;
 
     const $axios = axios.create(axiosConfig);

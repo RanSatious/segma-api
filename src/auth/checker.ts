@@ -39,4 +39,4 @@ function AuthChecker(config: IAuthConfig = { autoLogout: true }) {
     };
 }
 
-export default AuthChecker;
+export { AuthChecker };

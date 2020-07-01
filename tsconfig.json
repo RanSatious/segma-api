@@ -17,8 +17,8 @@
         // "noImplicitThis": true
         // "strictNullChecks": true
 
-        "target": "esnext",
-        "module": "esnext",
+        "target": "es2019",
+        "module": "commonjs",
         "moduleResolution": "node",
         // 为 commonjs 的包添加 default export
         "esModuleInterop": true,
