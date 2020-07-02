@@ -16,6 +16,13 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    if (req.url === '/api/wait') {
+        setTimeout(() => {
+            res.end(JSON.stringify({ success: true, data: 'wait result' }));
+        }, 1000);
+        return;
+    }
+
     if (req.url === '/api/error') {
         res.end(JSON.stringify({ success: false, resultCode: 10010, data: 'failed' }));
         return;

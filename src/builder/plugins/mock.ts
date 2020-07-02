@@ -1,4 +1,5 @@
 import { Action } from './action';
+import { uid } from '../../utils';
 
 interface CancelableAction extends Action<any> {
     cancel?: (message: string) => void;
@@ -6,20 +7,29 @@ interface CancelableAction extends Action<any> {
 }
 
 function CancelableMock() {
+    let map = new Map();
     let token: Function | null;
     let action: CancelableAction = (mockPromise: Promise<any>) => {
+        let key = uid();
         return Promise.race([
             mockPromise,
             new Promise((resolve, reject) => {
                 token = reject;
+                map.set(key, token);
             }),
         ]).then(
             result => {
-                token = null;
+                if (token === map.get(key)) {
+                    token = null;
+                }
+                map.delete(key);
                 return result;
             },
             error => {
-                token = null;
+                if (token === map.get(key)) {
+                    token = null;
+                }
+                map.delete(key);
                 throw error;
             }
         );

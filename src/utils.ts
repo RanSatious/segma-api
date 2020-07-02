@@ -20,6 +20,22 @@ async function getPromiseStatus<T>(promise: Promise<T>): Promise<PromiseStatus> 
     }
 }
 
+/**
+ * id 生成器
+ *
+ * @export
+ * @param {number} [len=10]
+ * @returns
+ */
+export function uid(len: number = 10) {
+    let str = '';
+    let HEX = 'ZYXWVUTSRQPONMLKJIHGFEDCBAzyxwvutsrqponmlkjihgfedcba9876543210';
+    while (len--) {
+        str += HEX[(Math.random() * HEX.length) | 0];
+    }
+    return str;
+}
+
 function compose(...funcs: Function[]): Function {
     const action: Function = (...args: any[]) => {
         let result = funcs.reduce((result, func, index) => {

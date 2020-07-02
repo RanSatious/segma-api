@@ -1,4 +1,5 @@
 import Axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
+import { uid } from '../../utils';
 const { CancelToken } = Axios;
 
 type Action = (config: AxiosRequestConfig) => Promise<AxiosResponse<any>>;
@@ -8,20 +9,29 @@ interface CancelableAction extends Action {
 }
 
 function CancelableAxios(instance: AxiosInstance): Function {
+    let map = new Map();
     let token: Function | null;
     let action: CancelableAction = (config: AxiosRequestConfig) => {
+        let key = uid();
         return instance({
             ...config,
             cancelToken: new CancelToken(c => {
                 token = c;
+                map.set(key, token);
             }),
         }).then(
             result => {
-                token = null;
+                if (token === map.get(key)) {
+                    token = null;
+                }
+                map.delete(key);
                 return result;
             },
             error => {
-                token = null;
+                if (token === map.get(key)) {
+                    token = null;
+                }
+                map.delete(key);
                 throw error;
             }
         );
