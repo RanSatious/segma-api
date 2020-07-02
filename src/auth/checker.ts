@@ -3,9 +3,17 @@ import { logout } from '../api/message';
 
 interface IAuthConfig {
     autoLogout: boolean;
+    logout: Function;
 }
 
-function AuthChecker(config: IAuthConfig = { autoLogout: true }) {
+const defaultConfig: IAuthConfig = {
+    autoLogout: true,
+    logout: () => {
+        logout(process.env.VUE_APP_AUTH_REDIRECT_URI);
+    },
+};
+
+function AuthChecker(config: IAuthConfig = { ...defaultConfig }) {
     return {
         watch: {
             $route: {
@@ -14,13 +22,12 @@ function AuthChecker(config: IAuthConfig = { autoLogout: true }) {
                     if (!val.name) {
                         return;
                     }
-                    let { token } = val.query;
+                    let { token, ...query } = val.query;
                     if (!token) {
                         token = new URLSearchParams(location.search).get('token');
                     }
                     setToken(token);
                     if (token) {
-                        let { token: tk, ...query } = (this as any).$route.query;
                         (this as any).$router.push({
                             name: (this as any).$route.name,
                             query,
@@ -30,7 +37,7 @@ function AuthChecker(config: IAuthConfig = { autoLogout: true }) {
             },
         },
         async mounted() {
-            const { autoLogout } = config;
+            const { autoLogout, logout } = config;
             let token = await getToken();
             if (!token && autoLogout) {
                 logout();

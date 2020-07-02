@@ -22,20 +22,12 @@ async function getPromiseStatus<T>(promise: Promise<T>): Promise<PromiseStatus> 
 
 function compose(...funcs: Function[]): Function {
     const action: Function = (...args: any[]) => {
-        let [callback, ...params] = args.reverse();
-        if (typeof callback !== 'function') {
-            callback = () => {};
-            params = args;
-        } else {
-            params.reverse();
-        }
-
         let result = funcs.reduce((result, func, index) => {
             if (index === 0) {
                 return func(...result);
             }
-            return func(result, callback);
-        }, params);
+            return func(result);
+        }, args);
 
         return result;
     };

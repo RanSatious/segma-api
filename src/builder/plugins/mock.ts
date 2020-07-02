@@ -1,5 +1,6 @@
-type Action = (mockPromise: Promise<any>) => Promise<any>;
-interface CancelableAction extends Action {
+import { Action } from './action';
+
+interface CancelableAction extends Action<any> {
     cancel?: (message: string) => void;
     getToken?: () => Function | null;
 }

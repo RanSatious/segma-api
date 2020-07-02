@@ -1,12 +1,13 @@
 import Axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { compose } from '../utils';
-import callbackPromise from './plugins/callback';
 import { CancelableMock } from './plugins/mock';
 import { CancelableAxios } from './plugins/axios';
+import { CallbackPromise } from './plugins/callback';
 
 interface ApiFunction extends Function {
     cancel?: (message: string) => void;
     getToken?: () => Function | null;
+    callback?: Function;
 }
 
 interface ApiBuilderConfig {
@@ -53,7 +54,7 @@ export function buildApi(config: ApiBuilderConfig): ApiFunction {
     }
 
     if (callback) {
-        steps.push(callbackPromise);
+        steps.push(CallbackPromise());
     }
 
     return compose(...steps);

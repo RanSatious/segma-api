@@ -105,7 +105,7 @@ test('[mock] callback works correctly', async () => {
         callback: true,
     });
 
-    await api((status, result) => {
+    api.callback((status, result) => {
         expect(['start', 'success', 'error'].includes(status)).toBe(true);
         if (status === 'start') {
             expect(result).toBeFalsy();
@@ -113,6 +113,7 @@ test('[mock] callback works correctly', async () => {
             expect(result).toBe('result');
         }
     });
+    await api();
 });
 
 test('[mock] callback works correctly when error exists', async () => {
@@ -133,9 +134,10 @@ test('[mock] callback works correctly when error exists', async () => {
 
     let result;
     try {
-        await api((...args) => {
+        api.callback((...args) => {
             result = args;
         });
+        await api();
     } catch (error) {
         expect(error).toBe('error exists');
     } finally {
@@ -204,7 +206,7 @@ test('callback works correctly', async () => {
         callback: true,
     });
 
-    await api((status, result) => {
+    api.callback((status, result) => {
         expect(['start', 'success', 'error'].includes(status)).toBe(true);
         if (status === 'start') {
             expect(result).toBeFalsy();
@@ -212,6 +214,7 @@ test('callback works correctly', async () => {
             expect(result.data).toBe('hello world');
         }
     });
+    await api();
 });
 
 test('callback works correctly when error exists', async () => {
@@ -232,9 +235,10 @@ test('callback works correctly when error exists', async () => {
 
     let result;
     try {
-        await api((...args) => {
+        api.callback((...args) => {
             result = args;
         });
+        await api();
     } catch (error) {
         expect(error).toBeInstanceOf(Error);
     } finally {
