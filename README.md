@@ -15,7 +15,15 @@ https://github.com/RanSatious/segma-api
 ### 安装
 
 ```bash
+# 方式1
+# 切换仓库
+npm config set registry http://nexus.segma.tech/repository/npm-public/
+# 安装
 npm i @segma/api-tools
+
+# 方式2
+# 直接指定地址
+npm i http://nexus.segma.tech/repository/npm-segma/@segma/api-tools/-/api-tools-0.1.0.tgz
 ```
 
 ### 使用
