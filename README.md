@@ -23,7 +23,7 @@ npm i @segma/api-tools
 
 # 方式2
 # 直接指定地址
-npm i http://nexus.segma.tech/repository/npm-segma/@segma/api-tools/-/api-tools-0.1.0.tgz
+npm i http://npm.segma.tech/@segma/api-tools/-/api-tools-0.1.0.tgz
 ```
 
 ### 使用
