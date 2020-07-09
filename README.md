@@ -17,7 +17,7 @@ https://github.com/RanSatious/segma-api
 ```bash
 # 方式1
 # 切换仓库
-npm config set registry http://nexus.segma.tech/repository/npm-public/
+npm config set registry http://npm.segma.tech/
 # 安装
 npm i @segma/api-tools
 
