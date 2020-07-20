@@ -13,7 +13,7 @@
         "dev": "tsc --watch",
         "prepack": "npm run clean && npm run build",
         "test": "jest --env=jsdom",
-        "test:one": "jest tests/api.test.ts --env=jsdom",
+        "test:one": "jest tests/builder.test.ts --env=jsdom",
         "server": "node tests/server.js"
     },
     "keywords": [

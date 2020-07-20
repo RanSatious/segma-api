@@ -325,7 +325,8 @@ interface ApiBuilderConfig {
     // 详情可参考：https://github.com/axios/axios#request-config
     axios: () => AxiosRequestConfig;
     // 返回 mock 数据的方法
-    mock: () => Promise<any>;
+    // 接收 axios 方法返回的 AxiosRequestConfig 作为参数
+    mock: (config?: AxiosRequestConfig) => Promise<any>;
     // 是否 mock 数据
     isMock: boolean;
     // 接口是否可以执行取消操作，为 true 时，返回的接口函数会多出 cancel/getToken 2个方法

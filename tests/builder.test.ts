@@ -63,6 +63,25 @@ test('[mock] api return data correctly', async () => {
     expect(result).toBe('result');
 });
 
+test('[mock] receive axios config', async () => {
+    let api = buildApi({
+        name: 'name',
+        mock: async config => {
+            await sleep();
+            return config.url;
+        },
+        axios: () => ({
+            url: '/test',
+            method: 'GET',
+        }),
+        isMock: true,
+        cancel: true,
+    });
+
+    let result = await api();
+    expect(result).toBe('/test');
+});
+
 test('[mock] cancel api with correct message', async () => {
     let api = buildApi({
         name: 'name',

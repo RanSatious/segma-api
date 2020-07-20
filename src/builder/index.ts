@@ -13,7 +13,7 @@ interface ApiFunction extends Function {
 interface ApiBuilderConfig {
     name: string;
     axios: () => AxiosRequestConfig;
-    mock: () => Promise<any>;
+    mock: (config?: AxiosRequestConfig) => Promise<any>;
     isMock: boolean | string;
     cancel?: boolean;
     callback?: boolean;
@@ -37,7 +37,7 @@ export function initBuilder(config: BuilderConfig) {
 }
 
 export function buildApi(config: ApiBuilderConfig): ApiFunction {
-    const { name, axios, mock, isMock, cancel, callback } = config;
+    const { name, axios = () => void 0, mock, isMock, cancel, callback } = config;
     let steps: any[] = [];
 
     steps.push((...params: any[]) => {
@@ -45,7 +45,7 @@ export function buildApi(config: ApiBuilderConfig): ApiFunction {
         return params;
     });
 
-    steps.push(isMock ? mock : axios);
+    steps.push(isMock ? compose(axios, mock) : axios);
 
     if (cancel) {
         steps.push(isMock ? CancelableMock() : CancelableAxios(_config.axios));
