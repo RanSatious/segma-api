@@ -1,13 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import qs from 'qs';
-import { logout } from './message';
-import { getToken } from '../token/token';
+import { IAuthStrategy, SegmaStrategy } from './strategy';
 
 interface IApiConfig {
-    tip: (message: string, code?: number | null) => void;
+    tip: (message: string, code?: number) => void;
     axiosConfig?: AxiosRequestConfig;
-    auth?: boolean;
-    redirect?: string;
+    auth?: IAuthStrategy;
 }
 
 const defaultConfig: IApiConfig = {
@@ -26,10 +24,9 @@ const defaultConfig: IApiConfig = {
             return qs.stringify(params, { arrayFormat: 'brackets' });
         },
     },
-    auth: false,
 };
 
-function ApiFactory(config: IApiConfig) {
+function ApiFactory(config: IApiConfig = defaultConfig) {
     config = {
         ...defaultConfig,
         ...config,
@@ -38,14 +35,15 @@ function ApiFactory(config: IApiConfig) {
             ...config.axiosConfig,
         },
     };
-    const { tip, axiosConfig, auth, redirect } = config;
+    const { tip, axiosConfig, auth } = config;
 
     const $axios = axios.create(axiosConfig);
 
+    // todo: integrate with api builder
     $axios.interceptors.request.use(
         async config => {
             if (auth) {
-                config.headers['Authorization'] = await getToken();
+                await auth.onAuth(config);
             }
             return config;
         },
@@ -55,15 +53,13 @@ function ApiFactory(config: IApiConfig) {
     );
 
     const errorHandler: Record<number | string, (e: AxiosError) => Promise<any>> = {
-        401: (error: AxiosError) => {
+        401: error => {
             if (auth) {
-                setTimeout(() => {
-                    logout(redirect);
-                }, 500);
+                auth.onUnauthorized(error);
             }
             return Promise.reject(error);
         },
-        403: (error: AxiosError) => {
+        403: error => {
             let { meta = {} } = error.response?.data || {};
             if (!meta.slient) {
                 tip('权限验证失败，即将跳转到首页');
@@ -73,7 +69,7 @@ function ApiFactory(config: IApiConfig) {
             }, 500);
             return Promise.reject(error);
         },
-        default: (error: AxiosError) => {
+        default: error => {
             if (!(error.message && (error.message === '取消上传' || error.message === 'cancel'))) {
                 if (navigator.onLine) {
                     error.message ? tip(error.message) : tip('服务器错误，请联系系统管理员！');
@@ -110,4 +106,4 @@ function ApiFactory(config: IApiConfig) {
     return $axios;
 }
 
-export { ApiFactory };
+export { ApiFactory, SegmaStrategy };

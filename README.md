@@ -43,12 +43,11 @@ import { ApiFactory, getToken, setToken, clearToken, AuthChecker, initBuilder, b
 **快速使用**
 
 ```javascript
-import { ApiFactory } from '@segma/api-tools';
+import { ApiFactory, SegmaStrategy } from '@segma/api-tools';
 
 const axios = ApiFactory({
     tip: console.log,
-    auth: true,
-    redirect: process.env.VUE_APP_AUTH_REDIRECT_URI,
+    auth: SegmaStrategy,
     axiosConfig: {
         baseURL: process.env.VUE_APP_BASE_API,
     },
@@ -73,12 +72,15 @@ interface IApiConfig {
     // axios 配置
     // 会与默认的 axios 配置进行合并
     axiosConfig?: AxiosRequestConfig;
-    // 如果为 true，则会在请求时向 header 添加 Authorization 字段，在响应 401 错误时，会自动执行 logout 操作。
-    // todo: 重构为具体的 auth strategy，包括 如果获取与设置 token，如何响应 401 错误
-    auth?: boolean;
-    // 登出时需要跳转到的地址
-    // todo: 重构到 auth strategy中
-    redirect?: string;
+    // 认证策略
+    auth?: IAuthStrategy;
+}
+
+interface IAuthStrategy {
+    // 在请求前调用
+    onAuth: (config: AxiosRequestConfig) => Promise<void>;
+    // 在请求返回401时调用
+    onUnauthorized: (error: AxiosError) => void;
 }
 ```
 
@@ -103,7 +105,23 @@ const defaultConfig: IApiConfig = {
             return qs.stringify(params, { arrayFormat: 'brackets' });
         },
     },
-    auth: false,
+};
+```
+
+**SegmaStrategy**
+
+内置的认证策略
+
+```typescript
+const SegmaStrategy: IAuthStrategy = {
+    async onAuth(config) {
+        config.headers['Authorization'] = await getToken();
+    },
+    onUnauthorized(error) {
+        setTimeout(() => {
+            logout(process.env.VUE_APP_AUTH_REDIRECT_URI);
+        }, 500);
+    },
 };
 ```
 
