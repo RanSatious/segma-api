@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import qs from 'qs';
-import { IAuthStrategy, SegmaStrategy } from './strategy';
+import { IAuthStrategy, SegmaStrategy, QingtuiStrategy } from './strategy';
 
 interface IApiConfig {
     tip: (message: string, code?: number) => void;
@@ -106,4 +106,4 @@ function ApiFactory(config: IApiConfig = defaultConfig) {
     return $axios;
 }
 
-export { ApiFactory, SegmaStrategy };
+export { ApiFactory, SegmaStrategy, QingtuiStrategy };

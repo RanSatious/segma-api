@@ -7,14 +7,34 @@ export interface IAuthStrategy {
     onUnauthorized: (error: AxiosError) => void;
 }
 
+// Segma认证策略
 export const SegmaStrategy: IAuthStrategy = {
     async onAuth(config) {
         // todo: refactor token manager
         config.headers['Authorization'] = await getToken();
     },
     onUnauthorized(error) {
-        setTimeout(() => {
-            logout(process.env.VUE_APP_AUTH_REDIRECT_URI);
-        }, 500);
+        let redirect = process.env.VUE_APP_AUTH_REDIRECT_URI;
+        let clientId = process.env.VUE_APP_AUTH_CLIENT_ID;
+        if (redirect && clientId) {
+            setTimeout(() => {
+                logout(`${redirect}?state=xyz&client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.href)}`);
+            }, 500);
+        }
+    },
+};
+
+// 轻推认证策略
+export const QingtuiStrategy: IAuthStrategy = {
+    async onAuth(config) {
+        config.headers['Authorization'] = await getToken();
+    },
+    onUnauthorized(error) {
+        let redirect = process.env.VUE_APP_AUTH_REDIRECT_URI;
+        if (redirect) {
+            setTimeout(() => {
+                logout(`${redirect}?uri=${encodeURIComponent(window.location.href)}`);
+            }, 500);
+        }
     },
 };

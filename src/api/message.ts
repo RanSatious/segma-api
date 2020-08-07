@@ -1,8 +1,6 @@
 const handlers: Record<string, Function> = {
-    loginout: (redirect: string) => {
-        if (redirect) {
-            window.location.href = `${redirect}?uri=${encodeURIComponent(window.location.href)}`;
-        }
+    loginout: (href: string) => {
+        window.location.href = href;
     },
 };
 

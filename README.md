@@ -104,7 +104,7 @@ const defaultConfig: IApiConfig = {
 
 **SegmaStrategy**
 
-内置的认证策略
+Segma的认证策略
 
 ```typescript
 const SegmaStrategy: IAuthStrategy = {
@@ -112,9 +112,33 @@ const SegmaStrategy: IAuthStrategy = {
         config.headers['Authorization'] = await getToken();
     },
     onUnauthorized(error) {
-        setTimeout(() => {
-            logout(process.env.VUE_APP_AUTH_REDIRECT_URI);
-        }, 500);
+        let redirect = process.env.VUE_APP_AUTH_REDIRECT_URI;
+        let clientId = process.env.VUE_APP_AUTH_CLIENT_ID;
+        if (redirect && clientId) {
+            setTimeout(() => {
+                logout(`${redirect}?state=xyz&client_id=${clientId}&redirect_uri=${encodeURIComponent(window.location.href)}`);
+            }, 500);
+        }
+    },
+};
+```
+
+**QingtuiStrategy**
+
+轻推的认证策略
+
+```typescript
+const QingtuiStrategy: IAuthStrategy = {
+    async onAuth(config) {
+        config.headers['Authorization'] = await getToken();
+    },
+    onUnauthorized(error) {
+        let redirect = process.env.VUE_APP_AUTH_REDIRECT_URI;
+        if (redirect) {
+            setTimeout(() => {
+                logout(`${redirect}?uri=${encodeURIComponent(window.location.href)}`);
+            }, 500);
+        }
     },
 };
 ```

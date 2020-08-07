@@ -1,3 +1,7 @@
+# 0.1.4 (2020-08-07)
+
+-   [AuthStrategy] update `SegmaStrategy`, add `QingtuiStrategy`.
+
 # 0.1.3 (2020-07-21)
 
 -   [ApiFactory] refactor `IApiConfig` with new auth strategy: `IAuthStrategy`, add a build-in strategy called `SegmaStrategy`.
