@@ -1,5 +1,5 @@
 import { setToken, getToken } from '../token/token';
-import { logout } from '../api/message';
+import { SegmaStrategy } from '../api';
 
 interface IAuthConfig {
     autoLogout: boolean;
@@ -9,7 +9,7 @@ interface IAuthConfig {
 const defaultConfig: IAuthConfig = {
     autoLogout: true,
     logout: () => {
-        logout(process.env.VUE_APP_AUTH_REDIRECT_URI);
+        SegmaStrategy.onUnauthorized();
     },
 };
 

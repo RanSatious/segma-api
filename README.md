@@ -74,7 +74,7 @@ interface IAuthStrategy {
     // 在请求前调用
     onAuth: (config: AxiosRequestConfig) => Promise<void>;
     // 在请求返回401时调用
-    onUnauthorized: (error: AxiosError) => void;
+    onUnauthorized: (error?: AxiosError) => void;
 }
 ```
 
@@ -104,7 +104,7 @@ const defaultConfig: IApiConfig = {
 
 **SegmaStrategy**
 
-Segma的认证策略
+Segma 的认证策略
 
 ```typescript
 const SegmaStrategy: IAuthStrategy = {
@@ -238,12 +238,12 @@ interface IAuthConfig {
 **默认配置**
 
 ```typescript
-import { logout } from '../api/message';
+import { SegmaStrategy } from '../api';
 
 const defaultConfig: IAuthConfig = {
     autoLogout: true,
     logout: () => {
-        logout(process.env.VUE_APP_AUTH_REDIRECT_URI);
+        SegmaStrategy.onUnauthorized();
     },
 };
 ```

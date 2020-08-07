@@ -4,7 +4,7 @@ import { getToken } from '../token/token';
 
 export interface IAuthStrategy {
     onAuth: (config: AxiosRequestConfig) => Promise<void>;
-    onUnauthorized: (error: AxiosError) => void;
+    onUnauthorized: (error?: AxiosError) => void;
 }
 
 // Segma认证策略
