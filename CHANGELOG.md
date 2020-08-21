@@ -1,3 +1,7 @@
+# 0.1.5 (2020-08-07)
+
+-   [AuthChecker] update `AuthChecker`'s default logout behavior.
+
 # 0.1.4 (2020-08-07)
 
 -   [AuthStrategy] update `SegmaStrategy`, add `QingtuiStrategy`.
