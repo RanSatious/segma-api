@@ -25,17 +25,17 @@
     "author": "Satious Ran",
     "license": "ISC",
     "dependencies": {
-        "axios": "^0.19.2",
+        "axios": "^0.20.0",
         "qs": "^6.9.4"
     },
     "devDependencies": {
-        "@babel/core": "^7.11.4",
-        "@babel/preset-env": "^7.11.0",
+        "@babel/core": "^7.11.5",
+        "@babel/preset-env": "^7.11.5",
         "@babel/preset-typescript": "^7.10.4",
-        "@types/jest": "^26.0.10",
+        "@types/jest": "^26.0.13",
         "@types/qs": "^6.9.4",
         "babel-jest": "^26.3.0",
-        "jest": "^26.4.1",
+        "jest": "^26.4.2",
         "shx": "^0.3.2",
         "typescript": "^4.0.2"
     }
