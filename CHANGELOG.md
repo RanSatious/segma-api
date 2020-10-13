@@ -1,3 +1,7 @@
+# 0.1.7 (2020-10-13)
+
+-   [api builder] add param to `ApiBuilderConfig.axios`.
+
 # 0.1.6 (2020-10-09)
 
 -   update dependencies.
