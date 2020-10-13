@@ -12,7 +12,7 @@ interface ApiFunction extends Function {
 
 interface ApiBuilderConfig {
     name: string;
-    axios: () => AxiosRequestConfig;
+    axios: (params?: unknown) => AxiosRequestConfig;
     mock: (config?: AxiosRequestConfig) => Promise<any>;
     isMock: boolean | string;
     cancel?: boolean;
