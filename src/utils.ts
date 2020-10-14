@@ -39,7 +39,8 @@ export function uid(len: number = 10) {
 function compose(...funcs: Function[]): Function {
     const action: Function = (...args: any[]) => {
         let result = funcs.reduce((result, func, index) => {
-            if (index === 0) {
+            // spread params passing from outside
+            if (index <= 1) {
                 return func(...result);
             }
             return func(result);
