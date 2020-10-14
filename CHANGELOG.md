@@ -1,3 +1,7 @@
+# 0.1.8 (2020-10-14)
+
+-   [api builder] spread params passing from outside.
+
 # 0.1.7 (2020-10-13)
 
 -   [api builder] add param to `ApiBuilderConfig.axios`.
