@@ -359,7 +359,7 @@ interface ApiBuilderConfig {
     name: string;
     // 返回 axios 请求参数的函数
     // 详情可参考：https://github.com/axios/axios#request-config
-    axios: (params: unknown) => AxiosRequestConfig;
+    axios: (params?: unknown) => AxiosRequestConfig;
     // 返回 mock 数据的方法
     // 接收 axios 方法返回的 AxiosRequestConfig 作为参数
     mock: (config?: AxiosRequestConfig) => Promise<any>;

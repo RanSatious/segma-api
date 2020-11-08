@@ -1,3 +1,7 @@
+# 0.1.9 (2020-10-14)
+
+-   update dependencies.
+
 # 0.1.8 (2020-10-14)
 
 -   [api builder] spread params passing from outside.
