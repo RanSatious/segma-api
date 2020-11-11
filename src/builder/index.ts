@@ -24,38 +24,39 @@ interface BuilderConfig {
     log: (name: string, ...args: any[]) => void;
 }
 
-let _config: BuilderConfig = {
+let defaultBuilderConfig: BuilderConfig = {
     axios: Axios,
     log: console.log,
 };
 
-export function initBuilder(config: BuilderConfig) {
-    _config = {
-        ..._config,
-        ...config,
+export function initBuilder(builderConfig: BuilderConfig) {
+    builderConfig = {
+        ...defaultBuilderConfig,
+        ...builderConfig,
     };
-}
+    return function buildApi(config: ApiBuilderConfig): ApiFunction {
+        const { name, axios = () => void 0, mock, isMock, cancel, callback } = config;
+        let steps: any[] = [];
 
-export function buildApi(config: ApiBuilderConfig): ApiFunction {
-    const { name, axios = () => void 0, mock, isMock, cancel, callback } = config;
-    let steps: any[] = [];
+        steps.push((...params: any[]) => {
+            builderConfig.log(name, ...params);
+            return params;
+        });
 
-    steps.push((...params: any[]) => {
-        _config.log(name, ...params);
-        return params;
-    });
+        steps.push(axios);
+        if (isMock) {
+            steps.push(mock);
+            if (cancel) {
+                steps.push(CancelableMock());
+            }
+        } else {
+            steps.push(cancel ? CancelableAxios(builderConfig.axios) : builderConfig.axios);
+        }
 
-    steps.push(isMock ? compose(axios, mock) : axios);
+        if (callback) {
+            steps.push(CallbackPromise());
+        }
 
-    if (cancel) {
-        steps.push(isMock ? CancelableMock() : CancelableAxios(_config.axios));
-    } else if (!isMock) {
-        steps.push(_config.axios);
-    }
-
-    if (callback) {
-        steps.push(CallbackPromise());
-    }
-
-    return compose(...steps);
+        return compose(...steps);
+    };
 }

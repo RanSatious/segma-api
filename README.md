@@ -23,7 +23,7 @@ npm i @segma/api-tools
 ### 使用
 
 ```javascript
-import { ApiFactory, getToken, setToken, clearToken, AuthChecker, initBuilder, buildApi } from '@segma/api-tools';
+import { ApiFactory, getToken, setToken, clearToken, AuthChecker, initBuilder } from '@segma/api-tools';
 ```
 
 ## ApiFactory
@@ -266,7 +266,7 @@ api builder 可以轻松解决以上所有痛点：
 
 #### 初始化
 
-初始化的目的主要是为了指定 axios 实例。
+初始化的目的主要是为了指定 axios 实例，并返回 buildApi 函数来构建请求。
 
 **快速使用**
 
@@ -274,7 +274,7 @@ api builder 可以轻松解决以上所有痛点：
 // 初始化
 import { initBuilder } from '@segma/api-tools';
 
-initBuilder({
+const buildApi = initBuilder({
     axios,
     log: console.log,
 });
@@ -285,7 +285,7 @@ initBuilder({
 ```typescript
 import { AxiosInstance } from 'axios';
 
-declare function initBuilder(config: BuilderConfig): void;
+declare function initBuilder(config: BuilderConfig): (config: ApiBuilderConfig) => ApiFunction;
 
 interface BuilderConfig {
     // axios 实例
@@ -300,7 +300,7 @@ interface BuilderConfig {
 ```typescript
 import Axios from 'axios';
 
-let _config: BuilderConfig = {
+let defaultBuilderConfig: BuilderConfig = {
     axios: Axios,
     log: console.log,
 };
@@ -311,7 +311,7 @@ let _config: BuilderConfig = {
 ```javascript
 import { ApiFactory, initBuilder } from '@segma/api-tools';
 
-initBuilder({
+const buildApi = initBuilder({
     axios: ApiFactory({
         tip: console.log,
         auth: true,
@@ -328,7 +328,9 @@ initBuilder({
 **快速使用**
 
 ```javascript
-import { buildApi } from '@segma/api-tools';
+import { initBuilder } from '@segma/api-tools';
+
+const buildApi = initBuilder();
 
 const api = buildApi({
     name: 'test',
@@ -352,7 +354,7 @@ request();
 ```typescript
 import { AxiosRequestConfig } from 'axios';
 
-declare function buildApi(config: ApiBuilderConfig): ApiFunction;
+declare function initBuilder(config: BuilderConfig): (config: ApiBuilderConfig) => ApiFunction;
 
 interface ApiBuilderConfig {
     // 接口名称，供内置的日志功能使用
@@ -381,7 +383,9 @@ interface ApiFunction extends Function {
 ### mock 请求
 
 ```javascript
-import { buildApi } from '@segma/api-tools';
+import { initBuilder } from '@segma/api-tools';
+
+const buildApi = initBuilder();
 
 const api = buildApi({
     name: 'test',
@@ -399,7 +403,9 @@ const api = buildApi({
 ### 取消请求
 
 ```javascript
-import { buildApi } from '@segma/api-tools';
+import { initBuilder } from '@segma/api-tools';
+
+const buildApi = initBuilder();
 
 const api = buildApi({
     name: 'test',
@@ -445,7 +451,9 @@ api.callback(status => {
 ### 监测接口状态
 
 ```javascript
-import { buildApi } from '@segma/api-tools';
+import { initBuilder } from '@segma/api-tools';
+
+const buildApi = initBuilder();
 
 const api = buildApi({
     name: 'test',

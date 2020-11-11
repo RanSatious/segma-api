@@ -1,4 +1,4 @@
-import { initBuilder, buildApi } from '../dist/builder/index';
+import { initBuilder } from '../dist/builder/index';
 import Axios from 'axios';
 
 const sleep = (interval = 500) => {
@@ -9,8 +9,9 @@ const sleep = (interval = 500) => {
     });
 };
 
+let buildApi;
 beforeAll(() => {
-    initBuilder({
+    buildApi = initBuilder({
         axios: Axios,
         log: () => {},
     });
@@ -165,6 +166,30 @@ test('[mock] callback works correctly when error exists', async () => {
     }
 });
 
+test('[mock]request with multiple parameters', async () => {
+    let api = buildApi({
+        name: 'name',
+        mock: async config => {
+            await sleep();
+            return config;
+        },
+        axios: (id, name) => {
+            expect(id).toBe(1);
+            expect(name).toBe('tom');
+            return {
+                id,
+                name,
+            };
+        },
+        isMock: true,
+        cancel: true,
+    });
+
+    let result = await api(1, 'tom');
+    expect(result.id).toBe(1);
+    expect(result.name).toBe('tom');
+});
+
 test('api return data correctly', async () => {
     let api = buildApi({
         name: 'name',
@@ -180,6 +205,28 @@ test('api return data correctly', async () => {
     });
 
     let result = await api();
+    expect(result.data).toBe('hello world');
+});
+
+test('request with multiple parameters', async () => {
+    let api = buildApi({
+        name: 'name',
+        mock: async () => {
+            await sleep();
+            return 'result';
+        },
+        axios: (id, name) => {
+            expect(id).toBe(1);
+            expect(name).toBe('tom');
+            return {
+                url: 'http://localhost:7000',
+                method: 'GET',
+            };
+        },
+        isMock: false,
+    });
+
+    let result = await api(1, 'tom');
     expect(result.data).toBe('hello world');
 });
 
