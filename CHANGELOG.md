@@ -1,3 +1,7 @@
+# 0.2.0 (2020-11-11)
+
+-   [api builder] instead of using `buildApi` directly, `initBuilder` will return `buildApi` now.
+
 # 0.1.9 (2020-10-14)
 
 -   update dependencies.
