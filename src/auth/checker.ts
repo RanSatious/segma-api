@@ -31,7 +31,7 @@ function AuthChecker(config: IAuthConfig = { ...defaultConfig }) {
                         (this as any).$router.push({
                             name: (this as any).$route.name,
                             query,
-                        });
+                        }).catch(() => {});
                     }
                 },
             },
