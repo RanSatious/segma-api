@@ -1,3 +1,7 @@
+# 0.2.2 (2020-12-02)
+
+-   update dependencies.
+
 # 0.2.1 (2020-11-17)
 
 -   [auth checker] avoid redundant navigation.
