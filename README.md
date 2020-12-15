@@ -60,9 +60,24 @@ import { AxiosInstance } from 'axios';
 
 declare function ApiFactory(config: IApiConfig): AxiosInstance;
 
+interface IApiResult {
+    // 错误码
+    code: number;
+    // 返回提示信息
+    message: string;
+    // 跟踪id
+    traceId?: string;
+    // 导致错误的可能原因
+    possibleReason?: string;
+    // 建议采取的解决问题的措施
+    suggestMeasure?: string;
+    // 返回数据
+    data?: unknown;
+}
+
 interface IApiConfig {
     // 提示接口错误消息的函数
-    tip: (message: string, code?: number | null) => void;
+    tip: (message: string, code?: number | null, result?: IApiResult) => void;
     // axios 配置
     // 会与默认的 axios 配置进行合并
     axiosConfig?: AxiosRequestConfig;
