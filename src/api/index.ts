@@ -2,8 +2,17 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 import { IAuthStrategy, SegmaStrategy, QingtuiStrategy } from './strategy';
 
+interface IApiResult {
+    code: number;
+    message: string;
+    traceId?: string;
+    possibleReason?: string;
+    suggestMeasure?: string;
+    data?: unknown;
+}
+
 interface IApiConfig {
-    tip: (message: string, code?: number) => void;
+    tip: (message: string, code?: number, result?: IApiResult) => void;
     axiosConfig?: AxiosRequestConfig;
     auth?: IAuthStrategy;
 }
@@ -83,14 +92,23 @@ function ApiFactory(config: IApiConfig = defaultConfig) {
 
     $axios.interceptors.response.use(
         response => {
-            let { success, data, resultCode, resultMsg = '服务器错误', meta = {} } = response.data || {};
+            let { code, message = '服务器错误', traceId, possibleReason, suggestMeasure, data, meta = {} } = response.data || {};
+            const success = String(code) === '0';
+            const result: IApiResult = {
+                code,
+                message,
+                traceId,
+                possibleReason,
+                suggestMeasure,
+            };
             if (success) {
                 return data;
             } else {
                 if (!meta.slient) {
-                    tip(resultMsg, resultCode);
+                    tip(message, code, result);
                 }
-                return Promise.reject(resultMsg);
+                // todo: replace message with result
+                return Promise.reject(message);
             }
         },
         error => {

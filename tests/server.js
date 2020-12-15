@@ -18,30 +18,30 @@ const server = http.createServer((req, res) => {
     }
 
     if (req.url === '/api') {
-        res.end(JSON.stringify({ success: true, data: 'result' }));
+        res.end(JSON.stringify({ code: 0, message: '', data: 'result' }));
         return;
     }
 
     if (req.url === '/api/wait') {
         setTimeout(() => {
-            res.end(JSON.stringify({ success: true, data: 'wait result' }));
+            res.end(JSON.stringify({ code: 0, message: '', data: 'wait result' }));
         }, 1000);
         return;
     }
 
     if (req.url === '/api/error') {
-        res.end(JSON.stringify({ success: false, resultMsg: 'error msg', resultCode: 10010, data: 'failed' }));
+        res.end(JSON.stringify({ code: 10010, message: 'error msg', data: 'failed' }));
         return;
     }
 
     if (req.url === '/api/auth') {
-        res.end(JSON.stringify({ success: true, data: req.headers.authorization }));
+        res.end(JSON.stringify({ code: 0, message: '', data: req.headers.authorization }));
         return;
     }
 
     if (req.url === '/api/auth/error') {
         res.statusCode = 401;
-        res.end(JSON.stringify({ success: false, resultMsg: 'auth error', resultCode: 10020, data: 'auth failed' }));
+        res.end(JSON.stringify({ code: 10020, message: 'auth error', data: 'auth failed' }));
         return;
     }
 
