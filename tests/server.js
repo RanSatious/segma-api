@@ -34,6 +34,24 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    if (req.url === '/api/error/404') {
+        res.statusCode = 404;
+        res.end(JSON.stringify({ code: 404, message: 'error', data: 'failed' }));
+        return;
+    }
+
+    if (req.url === '/api/error/500') {
+        res.statusCode = 500;
+        res.end();
+        return;
+    }
+
+    if (req.url === '/api/error/502') {
+        res.statusCode = 502;
+        res.end(JSON.stringify({ code: 502, message: 'error', data: 'failed' }));
+        return;
+    }
+
     if (req.url === '/api/auth') {
         res.end(JSON.stringify({ code: 0, message: '', data: req.headers.authorization }));
         return;

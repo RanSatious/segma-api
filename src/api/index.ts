@@ -3,16 +3,17 @@ import qs from 'qs';
 import { IAuthStrategy, SegmaStrategy, QingtuiStrategy } from './strategy';
 
 interface IApiResult {
-    code: number;
+    code: number | string;
     message: string;
-    traceId?: string;
-    possibleReason?: string;
-    suggestMeasure?: string;
-    data?: unknown;
+    traceId?: string | null;
+    possibleReason?: string | null;
+    suggestMeasure?: string | null;
+    data?: unknown | null;
+    meta?: any;
 }
 
 interface IApiConfig {
-    tip: (message: string, code?: number, result?: IApiResult) => void;
+    tip: (message: string, code?: number | string, result?: IApiResult) => void;
     axiosConfig?: AxiosRequestConfig;
     auth?: IAuthStrategy;
 }
@@ -79,12 +80,42 @@ function ApiFactory(config: IApiConfig = defaultConfig) {
             return Promise.reject(error);
         },
         default: error => {
-            if (!(error.message && (error.message === '取消上传' || error.message === 'cancel'))) {
-                if (navigator.onLine) {
-                    error.message ? tip(error.message) : tip('服务器错误，请联系系统管理员！');
-                } else {
-                    tip('网络错误，请检查网络连接！');
-                }
+            let status = error.response?.status;
+            let { code, message, possibleReason = null, traceId = null, suggestMeasure = null, data = null, meta = {} } = (error.response?.data as IApiResult) || {};
+            let result: IApiResult = {
+                code,
+                message,
+                possibleReason,
+                traceId,
+                suggestMeasure,
+                data,
+            };
+
+            if (status === 404) {
+                result = {
+                    ...result,
+                    code: '404',
+                    message: '资源不存在',
+                    possibleReason: 'Not Found',
+                };
+            } else if (status === 502) {
+                result = {
+                    ...result,
+                    code: '502',
+                    message: '网关请求错误',
+                    possibleReason: 'Bad Gateway',
+                };
+            } else {
+                result = {
+                    ...result,
+                    code: '-1',
+                    message: '未知错误',
+                    possibleReason: 'Unknown Error',
+                };
+            }
+
+            if (!meta.slient) {
+                tip(result.message, result.code, result);
             }
             return Promise.reject(error);
         },
@@ -112,7 +143,7 @@ function ApiFactory(config: IApiConfig = defaultConfig) {
             }
         },
         error => {
-            if (!error.response || !error.response.data) {
+            if (!error.response || !error.response.status) {
                 return Promise.reject(error);
             }
             const status = error.response && error.response.status;
