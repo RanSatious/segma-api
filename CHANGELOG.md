@@ -1,3 +1,7 @@
+# 0.2.4 (2020-12-16)
+
+-   [api] dealing most kinds of error with tip function.
+
 # 0.2.3 (2020-12-15)
 
 -   update response struct.

@@ -1,6 +1,6 @@
 {
     "name": "@segma/api-tools",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "api tools used in most projects",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
