@@ -1,3 +1,7 @@
+# 0.2.5 (2020-12-17)
+
+-   [api] return full result instead of message only.
+
 # 0.2.4 (2020-12-16)
 
 -   [api] dealing most kinds of error with tip function.
