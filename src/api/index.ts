@@ -138,8 +138,7 @@ function ApiFactory(config: IApiConfig = defaultConfig) {
                 if (!meta.slient) {
                     tip(message, code, result);
                 }
-                // todo: replace message with result
-                return Promise.reject(message);
+                return Promise.reject(result);
             }
         },
         error => {
