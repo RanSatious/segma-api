@@ -25,7 +25,7 @@
     "author": "Satious Ran",
     "license": "ISC",
     "dependencies": {
-        "axios": "^0.21.0",
+        "axios": "^0.21.1",
         "qs": "^6.9.4"
     },
     "devDependencies": {
