@@ -1,3 +1,7 @@
+# 0.2.6 (2021-05-17)
+
+-   [api] add `MessageTipFactory` to set up custom message tip function.
+
 # 0.2.5 (2020-12-17)
 
 -   [api] return full result instead of message only.
