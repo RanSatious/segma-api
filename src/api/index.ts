@@ -12,8 +12,37 @@ interface IApiResult {
     meta?: any;
 }
 
+type MessageTipKey = keyof Omit<IApiResult, 'message' | 'data' | 'meta'>;
+type MessageTipFunc = (message: string, code?: number | string, result?: IApiResult) => void;
+
+const MessageTipFactory = (tip: Function): MessageTipFunc => {
+    return (message: string, code?: number | string, result?: IApiResult) => {
+        const title = result ? result.message : '';
+        const KEY_MAP = {
+            code: '错误码',
+            traceId: '追踪ID',
+            possibleReason: '可能原因',
+            suggestMeasure: '建议措施',
+        };
+        let msgString = Object.keys(KEY_MAP).reduce((total, current) => {
+            let key = KEY_MAP[current as MessageTipKey];
+            let val = result ? result[current as MessageTipKey] : '';
+            return val ? `${total} <p title=${val}>${key}：${val}</p>` : total;
+        }, '');
+        let titleMessage = title ? `<p class="el-message__title" title=${title}>${title}</p>` : '';
+        let msg = titleMessage + msgString;
+        tip({
+            iconClass: 'iconfont se-icon-f-warning icon-orange',
+            customClass: 'el-message',
+            dangerouslyUseHTMLString: true,
+            message: msg,
+            showClose: true,
+        });
+    };
+};
+
 interface IApiConfig {
-    tip: (message: string, code?: number | string, result?: IApiResult) => void;
+    tip: MessageTipFunc;
     axiosConfig?: AxiosRequestConfig;
     auth?: IAuthStrategy;
 }
@@ -154,4 +183,4 @@ function ApiFactory(config: IApiConfig = defaultConfig) {
     return $axios;
 }
 
-export { ApiFactory, SegmaStrategy, QingtuiStrategy };
+export { ApiFactory, SegmaStrategy, QingtuiStrategy, MessageTipFactory };
